@@ -83,6 +83,8 @@ class _LibraryPageState extends State<LibraryPage> {
   final List<String> books = [
     'My First Book',
     'Flutter Development',
+    'S R Ranganathan Bibliography',
+    "Five Law's",
   ];
 
   void addBook() {
@@ -121,36 +123,85 @@ class _LibraryPageState extends State<LibraryPage> {
     );
   }
 
+  void openBook(String book) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookDetailsPage(bookName: book),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Library'),
       ),
-      body: books.isEmpty
-          ? const Center(
-              child: Text('No books added yet'),
-            )
-          : ListView.builder(
-              itemCount: books.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const Icon(Icons.book),
-                  title: Text(books[index]),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      setState(() {
-                        books.removeAt(index);
-                      });
-                    },
-                  ),
-                );
+      body: ListView.builder(
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: const Icon(Icons.book),
+            title: Text(books[index]),
+            onTap: () => openBook(books[index]),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  books.removeAt(index);
+                });
               },
             ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: addBook,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class BookDetailsPage extends StatelessWidget {
+  final String bookName;
+
+  const BookDetailsPage({
+    super.key,
+    required this.bookName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Book Details'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.menu_book,
+              size: 100,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              bookName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'LIBRAK Library Book',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
       ),
     );
   }

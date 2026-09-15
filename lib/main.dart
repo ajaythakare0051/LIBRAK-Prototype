@@ -13,9 +13,6 @@ class LibrakApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'LIBRAK',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-        ),
         useMaterial3: true,
       ),
       home: const HomePage(),
@@ -38,30 +35,55 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
-              Icons.local_library,
-              size: 90,
+              Icons.menu_book,
+              size: 100,
             ),
             const SizedBox(height: 20),
             const Text(
               'LIBRAK',
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 36,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             const Text(
               'Smart Books. Smart Shelves. Smart Library.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LibraryPage(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.menu_book),
               label: const Text('Open Library'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LibraryPage extends StatelessWidget {
+  const LibraryPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Library'),
+      ),
+      body: const Center(
+        child: Text(
+          'Welcome to LIBRAK Library!',
+          style: TextStyle(fontSize: 22),
         ),
       ),
     );

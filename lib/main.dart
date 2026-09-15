@@ -14,6 +14,7 @@ class LibrakApp extends StatelessWidget {
       title: 'LIBRAK',
       theme: ThemeData(
         useMaterial3: true,
+        colorSchemeSeed: Colors.indigo,
       ),
       home: const HomePage(),
     );
@@ -71,8 +72,54 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class LibraryPage extends StatelessWidget {
+class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
+
+  @override
+  State<LibraryPage> createState() => _LibraryPageState();
+}
+
+class _LibraryPageState extends State<LibraryPage> {
+  final List<String> books = [
+    'My First Book',
+    'Flutter Development',
+  ];
+
+  void addBook() {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Book'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: 'Enter book name',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (controller.text.trim().isNotEmpty) {
+                  setState(() {
+                    books.add(controller.text.trim());
+                  });
+                }
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +127,30 @@ class LibraryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Library'),
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to LIBRAK Library!',
-          style: TextStyle(fontSize: 22),
-        ),
+      body: books.isEmpty
+          ? const Center(
+              child: Text('No books added yet'),
+            )
+          : ListView.builder(
+              itemCount: books.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: const Icon(Icons.book),
+                  title: Text(books[index]),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        books.removeAt(index);
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addBook,
+        child: const Icon(Icons.add),
       ),
     );
   }
